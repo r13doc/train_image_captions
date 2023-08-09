@@ -6,5 +6,4 @@
 /data_all.npy
 /dict_words.pkl
 /test.py
-/test_vectorizer.npy
-/train_vectorizer.npy
+/data_files
