@@ -27,6 +27,7 @@ def encoding_procedure(test_v, train_v, path_file, test_img, train_img):
             read = tf.io.read_file(files)
             im = tf.io.decode_jpeg(read, channels=3)
             im = tf.image.resize(im, [224, 224])
+            im = tf.cast(im, tf.float32)
             image_pre = preprocess_input(im)
             return image_pre
 
@@ -58,12 +59,14 @@ def encoding_procedure(test_v, train_v, path_file, test_img, train_img):
 
 # Тестирование данных
 if __name__ == '__main__':
-    from main import test_images, path, test_image_vector
+    from main import test_images, path, test_v
 
-    count = 0
-    rand_num = np.random.choice(len(test_images), 1)
+    test_vectors = np.load(test_v)
 
-    for file, pred_vector in zip(test_images, test_image_vector):
+    for _ in range(15):
+        number_image = np.random.choice(len(test_images), 1)
+        pred_vector = test_vectors[number_image]
+        file = test_images[number_image[0]]
         image = plt.imread(path + file)
         softmax = tf.nn.softmax(pred_vector)
         prev, prev2 = np.argmax(softmax), np.max(softmax)
@@ -71,6 +74,5 @@ if __name__ == '__main__':
         plt.imshow(image)
         plt.show()
         plt.pause(2.8)
-        count += 1
-        if count % 15 == 0:
-            break
+
+
